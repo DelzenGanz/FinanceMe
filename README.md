@@ -1,16 +1,16 @@
-# 💰 FinanceMe - Project Management Keuangan Pribadi
+#  FinanceMe - Project Management Keuangan Pribadi
 
 Halo semuanya! 👋 Selamat datang di repository **FinanceMe**.
 
 Ini adalah project aplikasi desktop pertama saya untuk mengelola keuangan pribadi secara *offline-first*. Saya membangun aplikasi ini untuk belajar bagaimana menggabungkan **React** dengan **Electron** dan menggunakan **SQLite** sebagai database lokal. 
 
-Tujuan utama project ini adalah membuat pencatatan keuangan jadi lebih keren (dengan UI dark mode!) dan tetap menjaga privasi karena semua data disimpan di komputer masing-masing.
+Tujuan utama project ini adalah membuat pencatatan keuangan jadi lebih keren, mudah dan tetap menjaga privasi karena semua data disimpan di komputer masing-masing.
 
 Saya membuat project ini juga untuk belajar mengatur keuangan pribadi saya sendiri. dikarenakan aplikasi/softwarre serupa banyak yang berbayar, saya memutuskan membuat versi simple dan sederhananya sendiri.
 
 ---
 
-## 🚀 Fitur Utama
+## Fitur Utama
 
 Aplikasi ini punya beberapa fitur yang saya buat untuk membantu kita tetap disiplin dalam mengatur uang:
 
@@ -24,7 +24,7 @@ Aplikasi ini punya beberapa fitur yang saya buat untuk membantu kita tetap disip
 
 ---
 
-## 🛠️ Teknologi yang Saya Gunakan
+## Teknologi yang Saya Gunakan
 
 Project ini dibangun menggunakan stack modern yang menurut saya seru banget buat dipelajari:
 
@@ -40,12 +40,13 @@ Project ini dibangun menggunakan stack modern yang menurut saya seru banget buat
 
 ## � Cara Menjalankan Project
 
-Kalau teman-teman mau coba running di lokal, pastikan sudah install [Node.js](https://nodejs.org/) ya!
+Kalau teman-teman mau coba running di lokal, pastikan sudah install [Node.js](https://nodejs.org/) 
+*Perlu diingat ini aplikasi yang running di MacOS ya guys
 
 1. **Clone project ini**:
    ```bash
-   git clone https://github.com/username-kamu/financement.git
-   cd financement
+   git clone https://github.com/username-kamu/financeme.git
+   cd financeme
    ```
 2. **Install semua dependensinya**:
    ```bash
@@ -81,3 +82,4 @@ Terima kasih sudah mampir! 🙏
 
 ---
 *Dibuat dengan ❤️ oleh seorang sigma yang lagi asik ngoding lagi.*
+
