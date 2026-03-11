@@ -11,6 +11,7 @@ import {
   User, Lock, Database, Palette,
   Plus, Pencil, Trash2, Check, Copy,
 } from 'lucide-react';
+import { formatNumberWithSeparators, parseCurrency } from '../utils/formatCurrency';
 import type { Category } from '../../electron/database/types';
 
 const CATEGORY_COLORS = [
@@ -24,7 +25,7 @@ const Settings = () => {
 
   // Profile
   const [name, setName] = useState(user?.name ?? '');
-  const [income, setIncome] = useState(String(user?.monthly_income ?? ''));
+  const [income, setIncome] = useState(formatNumberWithSeparators(user?.monthly_income ?? 0));
   const [currency, setCurrency] = useState(user?.currency ?? 'IDR');
   const [profileSaved, setProfileSaved] = useState(false);
 
@@ -70,7 +71,7 @@ const Settings = () => {
     try {
       const result = await api.auth.updateProfile({
         name: name.trim(),
-        monthly_income: Number(income),
+        monthly_income: parseCurrency(income),
         currency,
       });
       if (result.success && result.user) {
@@ -160,7 +161,12 @@ const Settings = () => {
           </div>
           <div>
             <label className="block text-xs text-slate-400 mb-1">Income Bulanan</label>
-            <input type="number" value={income} onChange={e => setIncome(e.target.value)} className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input
+              type="text"
+              value={income}
+              onChange={e => setIncome(formatNumberWithSeparators(e.target.value))}
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
           <div>
             <label className="block text-xs text-slate-400 mb-1">Mata Uang</label>

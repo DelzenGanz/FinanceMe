@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '../api/ipc';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency, parseCurrency } from '../utils/formatCurrency';
 import { useAuthStore } from '../store/authStore';
 import Modal from '../components/shared/Modal';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
@@ -75,14 +75,15 @@ const Investment = () => {
   };
 
   const handleSubmit = async () => {
+    const numericPct = parseCurrency(formPct);
     if (!formName.trim()) { setFormError('Nama wajib diisi'); return; }
-    if (!formPct || Number(formPct) <= 0) { setFormError('Persentase harus lebih dari 0'); return; }
+    if (!formPct || numericPct <= 0) { setFormError('Persentase harus lebih dari 0'); return; }
     try {
       const data = {
         user_id: user?.id ?? 1,
         name: formName.trim(),
-        allocation_percentage: Number(formPct),
-        target_monthly: monthlyIncome * Number(formPct) / 100,
+        allocation_percentage: numericPct,
+        target_monthly: monthlyIncome * numericPct / 100,
         type: formType,
         notes: formNotes || undefined,
       };
@@ -206,7 +207,7 @@ const Investment = () => {
             <label className="block text-xs text-slate-400 mb-1">% dari Income Bulanan</label>
             <input type="number" value={formPct} onChange={e => setFormPct(e.target.value)} placeholder="10" className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             {formPct && monthlyIncome > 0 && (
-              <p className="text-xs text-slate-500 mt-1">= {formatCurrency(monthlyIncome * Number(formPct) / 100, currency)} / bulan</p>
+              <p className="text-xs text-slate-500 mt-1">= {formatCurrency(monthlyIncome * parseCurrency(formPct) / 100, currency)} / bulan</p>
             )}
           </div>
           <div>

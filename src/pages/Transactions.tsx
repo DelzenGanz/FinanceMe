@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '../api/ipc';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency, formatNumberWithSeparators, parseCurrency } from '../utils/formatCurrency';
 import { useAuthStore } from '../store/authStore';
 import Modal from '../components/shared/Modal';
 import dayjs from 'dayjs';
@@ -86,7 +86,7 @@ const Transactions = () => {
   const openEditModal = (tx: Transaction) => {
     setEditingTx(tx);
     setFormType(tx.type);
-    setFormAmount(String(tx.amount));
+    setFormAmount(formatNumberWithSeparators(tx.amount));
     setFormCategoryId(String(tx.category_id ?? ''));
     setFormDate(tx.date);
     setFormDescription(tx.description ?? '');
@@ -99,13 +99,14 @@ const Transactions = () => {
 
   const handleSubmit = async () => {
     setFormError('');
-    if (!formAmount || Number(formAmount) <= 0) { setFormError('Jumlah harus lebih dari 0'); return; }
+    const numericAmount = parseCurrency(formAmount);
+    if (!formAmount || numericAmount <= 0) { setFormError('Jumlah harus lebih dari 0'); return; }
     if (!formDate) { setFormError('Tanggal wajib diisi'); return; }
 
     const data = {
       user_id: user?.id ?? 1,
       type: formType,
-      amount: Number(formAmount),
+      amount: numericAmount,
       category_id: formCategoryId ? Number(formCategoryId) : undefined,
       date: formDate,
       description: formDescription || undefined,
@@ -300,7 +301,13 @@ const Transactions = () => {
           {/* Amount */}
           <div>
             <label className="block text-xs text-slate-400 mb-1">Jumlah</label>
-            <input type="number" value={formAmount} onChange={e => setFormAmount(e.target.value)} placeholder="0" className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input
+              type="text"
+              value={formAmount}
+              onChange={e => setFormAmount(formatNumberWithSeparators(e.target.value))}
+              placeholder="0"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
 
           {/* Category */}

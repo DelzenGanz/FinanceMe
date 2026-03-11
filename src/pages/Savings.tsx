@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '../api/ipc';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency, formatNumberWithSeparators, parseCurrency } from '../utils/formatCurrency';
 import { useAuthStore } from '../store/authStore';
 import Modal from '../components/shared/Modal';
 import dayjs from 'dayjs';
@@ -44,13 +44,14 @@ const Savings = () => {
   const completedGoals = goals.filter(g => g.is_completed);
 
   const handleCreate = async () => {
+    const numericTarget = parseCurrency(formTarget);
     if (!formName.trim()) { setFormError('Nama wajib diisi'); return; }
-    if (!formTarget || Number(formTarget) <= 0) { setFormError('Target harus lebih dari 0'); return; }
+    if (!formTarget || numericTarget <= 0) { setFormError('Target harus lebih dari 0'); return; }
     try {
       await api.savings.create({
         user_id: user?.id ?? 1,
         name: formName.trim(),
-        target_amount: Number(formTarget),
+        target_amount: numericTarget,
         deadline: formDeadline || undefined,
         color: formColor,
       });
@@ -60,9 +61,10 @@ const Savings = () => {
   };
 
   const handleDeposit = async () => {
-    if (!selectedGoal || !depositAmount || Number(depositAmount) <= 0) return;
+    const numericDeposit = parseCurrency(depositAmount);
+    if (!selectedGoal || !depositAmount || numericDeposit <= 0) return;
     try {
-      await api.savings.deposit(selectedGoal.id, Number(depositAmount));
+      await api.savings.deposit(selectedGoal.id, numericDeposit);
       setIsDepositOpen(false);
       setDepositAmount('');
       loadData();
@@ -176,7 +178,13 @@ const Savings = () => {
           </div>
           <div>
             <label className="block text-xs text-slate-400 mb-1">Target</label>
-            <input type="number" value={formTarget} onChange={e => setFormTarget(e.target.value)} placeholder="0" className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input
+              type="text"
+              value={formTarget}
+              onChange={e => setFormTarget(formatNumberWithSeparators(e.target.value))}
+              placeholder="0"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
           <div>
             <label className="block text-xs text-slate-400 mb-1">Deadline (opsional)</label>
@@ -219,7 +227,14 @@ const Savings = () => {
           )}
           <div>
             <label className="block text-xs text-slate-400 mb-1">Jumlah Deposit</label>
-            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} placeholder="0" autoFocus className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input
+              type="text"
+              value={depositAmount}
+              onChange={e => setDepositAmount(formatNumberWithSeparators(e.target.value))}
+              placeholder="0"
+              autoFocus
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
           <div className="flex gap-3 pt-2">
             <button onClick={() => setIsDepositOpen(false)} className="flex-1 py-2.5 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg text-sm font-medium transition-colors">Batal</button>

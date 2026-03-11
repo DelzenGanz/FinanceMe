@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { api } from '../api/ipc';
 import { User, DollarSign, Lock, ArrowRight } from 'lucide-react';
+import { formatNumberWithSeparators, parseCurrency } from '../utils/formatCurrency';
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const Onboarding = () => {
       }
       setStep(2);
     } else if (step === 2) {
-      if (!monthlyIncome || Number(monthlyIncome) <= 0) {
+      if (!monthlyIncome || parseCurrency(monthlyIncome) <= 0) {
         setError('Masukkan pendapatan bulanan yang valid');
         return;
       }
@@ -56,7 +57,7 @@ const Onboarding = () => {
     try {
       const result = await api.auth.createUser({
         name: name.trim(),
-        monthly_income: Number(monthlyIncome),
+        monthly_income: parseCurrency(monthlyIncome),
         currency,
         pin,
       });
@@ -82,7 +83,12 @@ const Onboarding = () => {
       <div className="bg-slate-800 rounded-2xl p-8 w-full max-w-md border border-slate-700 shadow-2xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-100 mb-2">💰 FinanceMe</h1>
+          <h1 className="text-4xl tracking-tighter font-extrabold flex items-center justify-center mb-2">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
+              Finance
+            </span>
+            <span className="text-slate-100 ml-0.5">Me</span>
+          </h1>
           <p className="text-slate-400">Selamat datang! Mari atur profil Anda.</p>
         </div>
 
@@ -128,10 +134,10 @@ const Onboarding = () => {
                 Pendapatan Bulanan
               </label>
               <input
-                type="number"
+                type="text"
                 value={monthlyIncome}
-                onChange={(e) => setMonthlyIncome(e.target.value)}
-                placeholder="Contoh: 10000000"
+                onChange={(e) => setMonthlyIncome(formatNumberWithSeparators(e.target.value))}
+                placeholder="Contoh: 10.000.000"
                 autoFocus
                 className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 onKeyDown={(e) => e.key === 'Enter' && handleNextStep()}

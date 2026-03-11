@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '../api/ipc';
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency, formatNumberWithSeparators, parseCurrency } from '../utils/formatCurrency';
 import { useAuthStore } from '../store/authStore';
 import Modal from '../components/shared/Modal';
 import dayjs from 'dayjs';
@@ -69,20 +69,21 @@ const Budget = () => {
   const openEdit = (b: BudgetItem) => {
     setEditingBudget(b);
     setFormCategoryId(String(b.category_id));
-    setFormAmount(String(b.amount));
+    setFormAmount(formatNumberWithSeparators(b.amount));
     setFormError('');
     setIsModalOpen(true);
   };
 
   const handleSubmit = async () => {
     if (!formCategoryId) { setFormError('Pilih kategori'); return; }
-    if (!formAmount || Number(formAmount) <= 0) { setFormError('Jumlah harus lebih dari 0'); return; }
+    const numericAmount = parseCurrency(formAmount);
+    if (!formAmount || numericAmount <= 0) { setFormError('Jumlah harus lebih dari 0'); return; }
 
     try {
       if (editingBudget) {
-        await api.budgets.update(editingBudget.id, { amount: Number(formAmount), category_id: Number(formCategoryId) });
+        await api.budgets.update(editingBudget.id, { amount: numericAmount, category_id: Number(formCategoryId) });
       } else {
-        await api.budgets.create({ user_id: user?.id ?? 1, category_id: Number(formCategoryId), amount: Number(formAmount), month, year });
+        await api.budgets.create({ user_id: user?.id ?? 1, category_id: Number(formCategoryId), amount: numericAmount, month, year });
       }
       setIsModalOpen(false);
       loadData();
@@ -187,7 +188,13 @@ const Budget = () => {
           </div>
           <div>
             <label className="block text-xs text-slate-400 mb-1">Limit Budget</label>
-            <input type="number" value={formAmount} onChange={e => setFormAmount(e.target.value)} placeholder="0" className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input
+              type="text"
+              value={formAmount}
+              onChange={e => setFormAmount(formatNumberWithSeparators(e.target.value))}
+              placeholder="0"
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
           </div>
           {formError && <div className="px-3 py-2 bg-red-500/10 border border-red-500/20 rounded-lg"><p className="text-red-400 text-sm">{formError}</p></div>}
           <div className="flex gap-3 pt-2">

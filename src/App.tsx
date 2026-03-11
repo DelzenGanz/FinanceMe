@@ -60,8 +60,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-slate-100 mb-2">💰 FinanceMe</h1>
-          <p className="text-slate-400">Loading...</p>
+          <h1 className="text-3xl tracking-tighter font-extrabold flex items-center justify-center">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
+              Finance
+            </span>
+            <span className="text-slate-100 ml-0.5">Me</span>
+          </h1>
+          <p className="text-slate-400 mt-2">Loading...</p>
         </div>
       </div>
     );

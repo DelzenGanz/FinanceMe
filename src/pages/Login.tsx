@@ -88,8 +88,13 @@ const Login = () => {
           <div className="w-16 h-16 bg-indigo-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <ShieldCheck size={32} className="text-indigo-400" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-100 mb-1">💰 FinanceMe</h1>
-          <p className="text-slate-400 text-sm">Masukkan PIN untuk membuka</p>
+          <h1 className="text-3xl tracking-tighter font-extrabold flex items-center justify-center">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
+              Finance
+            </span>
+            <span className="text-slate-100 ml-0.5">Me</span>
+          </h1>
+          <p className="text-slate-400 text-sm mt-1">Masukkan PIN untuk membuka</p>
         </div>
 
         {/* PIN dots display */}

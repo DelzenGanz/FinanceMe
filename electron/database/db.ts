@@ -24,6 +24,8 @@ export function initDatabase(): void {
 
   const dbPath = path.join(userDataPath, 'financement.db');
 
+  console.log(`[DB] Using Database at: ${dbPath}`);
+
   db = new Database(dbPath);
 
   // Enable WAL mode for better concurrency
@@ -31,8 +33,6 @@ export function initDatabase(): void {
 
   // Enable foreign keys
   db.pragma('foreign_keys = ON');
-
-  console.log(`[DB] Database initialized at: ${dbPath}`);
 }
 
 /**

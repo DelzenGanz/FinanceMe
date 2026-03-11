@@ -16,8 +16,21 @@ export function formatCurrency(amount: number, currency: string = 'IDR'): string
 }
 
 /**
- * Parse a currency string back to a number.
+ * Format a number with thousand separators (dots) but without currency symbol.
+ * Useful for input fields.
+ */
+export function formatNumberWithSeparators(value: number | string): string {
+  const num = typeof value === 'string' ? Number(value.replace(/\D/g, '')) : value;
+  if (isNaN(num)) return '';
+  return new Intl.NumberFormat('id-ID').format(num);
+}
+
+/**
+ * Parse a currency/formatted string back to a number.
  */
 export function parseCurrency(value: string): number {
-  return Number(value.replace(/[^0-9,-]+/g, '').replace(',', '.'));
+  if (!value) return 0;
+  // Remove currency symbols, spaces, and dots (as separators)
+  // then convert comma to dot for decimal if any (though we mostly use integers here)
+  return Number(value.replace(/[^0-9,-]+/g, '').replace(/\./g, '').replace(',', '.'));
 }

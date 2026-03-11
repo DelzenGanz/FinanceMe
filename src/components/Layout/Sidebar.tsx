@@ -38,9 +38,12 @@ const Sidebar = () => {
       <div className="h-8 app-drag-region" />
 
       {/* Logo */}
-      <div className="px-5 py-4">
-        <h1 className="text-xl font-bold text-slate-100">
-          <span className="mr-2">💰</span>FinanceMe
+      <div className="px-6 py-6">
+        <h1 className="text-2xl tracking-tighter font-extrabold flex items-center">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
+            Finance
+          </span>
+          <span className="text-slate-100 ml-0.5">Me</span>
         </h1>
       </div>
 

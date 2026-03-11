@@ -69,6 +69,8 @@ function createWindow() {
 
 // ── App Lifecycle ────────────────────────────────────────────
 
+app.name = 'financement'
+
 app.whenReady().then(() => {
   // 1. Initialize database connection
   initDatabase()
