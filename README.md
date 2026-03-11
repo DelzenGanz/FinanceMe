@@ -1,6 +1,6 @@
 #  FinanceMe - Project Management Keuangan Pribadi
 
-Halo semuanya! 👋 Selamat datang di repository **FinanceMe**.
+Halo semuanya! Selamat datang di repository **FinanceMe**.
 
 Ini adalah project aplikasi desktop pertama saya untuk mengelola keuangan pribadi secara *offline-first*. Saya membangun aplikasi ini untuk belajar bagaimana menggabungkan **React** dengan **Electron** dan menggunakan **SQLite** sebagai database lokal. 
 
@@ -38,7 +38,7 @@ Project ini dibangun menggunakan stack modern yang menurut saya seru banget buat
 
 ---
 
-## � Cara Menjalankan Project
+## Cara Menjalankan Project
 
 Kalau teman-teman mau coba running di lokal, pastikan sudah install [Node.js](https://nodejs.org/) 
 *Perlu diingat ini aplikasi yang running di MacOS ya guys
@@ -63,7 +63,7 @@ Kalau teman-teman mau coba running di lokal, pastikan sudah install [Node.js](ht
 
 ---
 
-## 📂 Struktur Project
+## Struktur Project
 
 - `electron/`: Isi kodingan untuk proses utama desktop dan pengaturan database SQLite.
 - `src/`: Semua kodingan tampilan (React).
@@ -74,7 +74,7 @@ Kalau teman-teman mau coba running di lokal, pastikan sudah install [Node.js](ht
 
 ---
 
-## 📝 Catatan Penutup
+## Catatan Penutup
 
 Project ini masih jauh dari kata sempurna karena saya masih dalam tahap belajar. Kalau teman-teman punya saran atau masukan, silakan banget ya! Semoga project ini bisa bermanfaat atau menginspirasi.
 
@@ -82,4 +82,5 @@ Terima kasih sudah mampir! 🙏
 
 ---
 *Dibuat dengan ❤️ oleh seorang sigma yang lagi asik ngoding lagi.*
+
 
