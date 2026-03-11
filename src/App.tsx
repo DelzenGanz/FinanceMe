@@ -20,6 +20,7 @@ import Savings from './pages/Savings';
 import Investment from './pages/Investment';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import AIAdvisor from './pages/AIAdvisor';
 import Login from './pages/Login';
 import Onboarding from './pages/Onboarding';
 
@@ -99,6 +100,7 @@ function App() {
             <Route path="/investment" element={<Investment />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/ai-advisor" element={<AIAdvisor />} />
           </Route>
 
           {/* Catch-all */}

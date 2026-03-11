@@ -126,5 +126,19 @@ export function runMigrations(): void {
     );
   `);
 
+  // ------- Migration: add groq_api_key to users -------
+  const columns = db.prepare("PRAGMA table_info(users)").all() as { name: string }[];
+  if (!columns.some(c => c.name === 'groq_api_key')) {
+    db.exec("ALTER TABLE users ADD COLUMN groq_api_key TEXT");
+    console.log('[DB] Migration: added groq_api_key column to users.');
+    
+    // Attempt to migrate old gemini or grok key if it exists
+    if (columns.some(c => c.name === 'grok_api_key')) {
+      db.exec("UPDATE users SET groq_api_key = grok_api_key WHERE grok_api_key IS NOT NULL");
+    } else if (columns.some(c => c.name === 'gemini_api_key')) {
+      db.exec("UPDATE users SET groq_api_key = gemini_api_key WHERE gemini_api_key IS NOT NULL");
+    }
+  }
+
   console.log('[DB] Migrations complete — all tables ready.');
 }

@@ -80,4 +80,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getAppVersion: () => ipcRenderer.invoke('settings:getAppVersion'),
     resetData: () => ipcRenderer.invoke('settings:resetData'),
   },
+
+  // ── AI Advisor ────────────────────────────────────────────
+  ai: {
+    chat: (message: string) => ipcRenderer.invoke('ai:chat', message),
+    saveKey: (apiKey: string) => ipcRenderer.invoke('ai:saveKey', apiKey),
+    getKey: () => ipcRenderer.invoke('ai:getKey'),
+    clearHistory: () => ipcRenderer.invoke('ai:clearHistory'),
+  },
 })

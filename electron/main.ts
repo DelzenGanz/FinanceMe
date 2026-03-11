@@ -15,6 +15,7 @@ import { registerSavingsHandlers } from './database/handlers/savings.handler'
 import { registerInvestmentHandlers } from './database/handlers/investments.handler'
 import { registerReportHandlers } from './database/handlers/reports.handler'
 import { registerSettingsHandlers } from './database/handlers/settings.handler'
+import { registerAIHandlers } from './database/handlers/ai.handler'
 
 
 
@@ -90,6 +91,7 @@ app.whenReady().then(() => {
   registerInvestmentHandlers()
   registerReportHandlers()
   registerSettingsHandlers()
+  registerAIHandlers()
 
   // 5. Create the window
   createWindow()

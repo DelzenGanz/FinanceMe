@@ -10,6 +10,7 @@ import Modal from '../components/shared/Modal';
 import {
   User, Lock, Database, Palette,
   Plus, Pencil, Trash2, Check, Copy,
+  Sparkles, Eye, EyeOff,
 } from 'lucide-react';
 import { formatNumberWithSeparators, parseCurrency } from '../utils/formatCurrency';
 import type { Category } from '../../electron/database/types';
@@ -46,6 +47,14 @@ const Settings = () => {
   const [catIcon, setCatIcon] = useState('Tag');
   const [catError, setCatError] = useState('');
 
+  // AI Key
+  const [aiKeyInput, setAiKeyInput] = useState('');
+  const [aiKeyMasked, setAiKeyMasked] = useState('');
+  const [hasAiKey, setHasAiKey] = useState(false);
+  const [showAiKey, setShowAiKey] = useState(false);
+  const [aiKeySaved, setAiKeySaved] = useState(false);
+  const [aiKeyError, setAiKeyError] = useState('');
+
   // DB
   const [dbPath, setDbPath] = useState('');
   const [appVersion, setAppVersion] = useState('');
@@ -55,14 +64,17 @@ const Settings = () => {
 
   const loadData = async () => {
     try {
-      const [cats, path, version] = await Promise.all([
+      const [cats, path, version, aiKey] = await Promise.all([
         api.categories.getAll(),
         api.settings.getDbPath(),
         api.settings.getAppVersion(),
+        api.ai.getKey(),
       ]);
       setCategories(cats);
       setDbPath(path);
       setAppVersion(version);
+      setHasAiKey(aiKey.hasKey);
+      setAiKeyMasked(aiKey.maskedKey);
     } catch (err) { console.error(err); }
   };
 
@@ -139,6 +151,22 @@ const Settings = () => {
     navigator.clipboard.writeText(dbPath);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSaveAiKey = async () => {
+    setAiKeyError('');
+    if (!aiKeyInput.trim()) { setAiKeyError('API Key tidak boleh kosong'); return; }
+    try {
+      const result = await api.ai.saveKey(aiKeyInput.trim());
+      if (result.success) {
+        setAiKeySaved(true);
+        setAiKeyInput('');
+        setTimeout(() => setAiKeySaved(false), 2000);
+        loadData(); // refresh masked key
+      } else {
+        setAiKeyError(result.error || 'Gagal menyimpan API Key');
+      }
+    } catch { setAiKeyError('Gagal menyimpan API Key'); }
   };
 
   const expenseCategories = categories.filter(c => c.type === 'expense');
@@ -260,6 +288,43 @@ const Settings = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ── AI Setup ──────────────────────────────── */}
+      <div className="bg-slate-800 rounded-xl ring-1 ring-slate-700 p-6">
+        <h3 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2"><Sparkles size={16} /> AI Advisor Setup</h3>
+        <p className="text-xs text-slate-400 mb-4">Masukkan Groq API Key untuk mengaktifkan fitur AI Advisor. Key disimpan secara lokal di database kamu.</p>
+        {hasAiKey && (
+          <div className="flex items-center gap-2 mb-4 px-3 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
+            <Check size={14} className="text-emerald-400" />
+            <span className="text-xs text-emerald-400">Key aktif:</span>
+            <code className="text-xs text-slate-300 font-mono">{aiKeyMasked}</code>
+          </div>
+        )}
+        <div className="flex gap-2">
+          <div className="flex-1 relative">
+            <input
+              type={showAiKey ? 'text' : 'password'}
+              value={aiKeyInput}
+              onChange={e => setAiKeyInput(e.target.value)}
+              placeholder={hasAiKey ? 'Ganti API Key...' : 'Masukkan Groq API Key...'}
+              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2.5 pr-10 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            <button
+              onClick={() => setShowAiKey(!showAiKey)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+            >
+              {showAiKey ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+          <button
+            onClick={handleSaveAiKey}
+            className="px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+          >
+            {aiKeySaved ? <><Check size={14} /> Tersimpan!</> : 'Simpan Key'}
+          </button>
+        </div>
+        {aiKeyError && <p className="text-red-400 text-xs mt-2">{aiKeyError}</p>}
       </div>
 
       {/* ── Database Info ─────────────────────────── */}

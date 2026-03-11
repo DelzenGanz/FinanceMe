@@ -7,6 +7,7 @@ import {
   TrendingUp,
   BarChart3,
   Settings,
+  Sparkles,
 } from 'lucide-react';
 
 interface NavItem {
@@ -58,6 +59,14 @@ const Sidebar = () => {
             {item.label}
           </NavLink>
         ))}
+
+        {/* AI Advisor — special item */}
+        <div className="mt-2 pt-2 border-t border-slate-700/50">
+          <NavLink to="/ai-advisor" className={navLinkClass}>
+            <Sparkles size={20} />
+            AI Advisor
+          </NavLink>
+        </div>
       </nav>
 
       {/* Divider */}

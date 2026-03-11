@@ -82,6 +82,12 @@ export interface ElectronAPI {
     getAppVersion: () => Promise<string>;
     resetData: () => Promise<boolean>;
   };
+  ai: {
+    chat: (message: string) => Promise<{ text: string; actions?: { action: string; params: Record<string, unknown>; description: string }[] }>;
+    saveKey: (apiKey: string) => Promise<{ success: boolean; error?: string }>;
+    getKey: () => Promise<{ hasKey: boolean; maskedKey: string }>;
+    clearHistory: () => Promise<{ success: boolean }>;
+  };
 }
 
 // Extend Window interface to include electronAPI
